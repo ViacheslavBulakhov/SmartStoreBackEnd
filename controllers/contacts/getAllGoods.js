@@ -1,9 +1,8 @@
-const Contact = require('../../models/MongooseModels/goods');
-
 const { ctrlWrapper } = require('../../helpers');
+const { Goods } = require('../../models/MongooseModels');
 
 const getAllGoods = async (req, res) => {
-  const data = await Contact.find({});
+  const data = await Goods.find({});
   res.json(data);
 };
 

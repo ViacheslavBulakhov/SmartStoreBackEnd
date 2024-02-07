@@ -1,5 +1,7 @@
-const contactsRouter = require('./contacts');
+const goodsRouter = require('./goods');
+const authRouter = require('./auth');
 
 module.exports = {
-  contactsRouter,
+  goodsRouter,
+  authRouter,
 };

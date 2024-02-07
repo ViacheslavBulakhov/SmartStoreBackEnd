@@ -1,9 +1,8 @@
-const Contact = require('../../models/MongooseModels/goods');
-
-const { HttpError, ctrlWrapper } = require('../../helpers');
+const { ctrlWrapper } = require('../../helpers');
+const { Goods } = require('../../models/MongooseModels');
 
 const addGood = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const result = await Goods.create(req.body);
   res.status(201).json(result);
 };
 

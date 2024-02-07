@@ -49,6 +49,6 @@ const goodSchema = new Schema({
 
 goodSchema.post('save', handleMongooseError);
 
-const Contact = model('good', goodSchema);
+const Goods = model('good', goodSchema);
 
-module.exports = Contact;
+module.exports = Goods;
