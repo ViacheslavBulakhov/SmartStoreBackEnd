@@ -1,11 +1,9 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-
-const DbHost =
-  "mongodb+srv://dmytro:OIcuitVJmVxgoViL@cluster0.ok7dign.mongodb.net/SmartStore?retryWrites=true&w=majority";
+const { DB_HOST } = process.env;
 
 mongoose
-  .connect(DbHost)
+  .connect(DB_HOST)
   .then(() =>
     app.listen(3000, () => {
       console.log("Server running.");
