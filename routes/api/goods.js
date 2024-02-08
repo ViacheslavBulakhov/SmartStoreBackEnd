@@ -16,6 +16,7 @@ const {
   updateGoodsStatus,
   getAllGoodsByOwner,
 } = require('../../controllers/goods');
+const { uploadErrorHandler } = require('../../service/imageService');
 
 const goodsRouter = express.Router();
 
@@ -29,7 +30,7 @@ goodsRouter.get('/:id', isValidId, getGodsById);
 goodsRouter.patch('/:id/favorite', authenticate, isValidId, updateGoodsStatus);
 
 // Private admin route
-goodsRouter.post('/', authenticate, isAdmin, upload.single('img'), addGood);
+goodsRouter.post('/', upload.single('img'), authenticate, isAdmin, addGood);
 
 goodsRouter.put('/:id', authenticate, isAdmin, isValidId, updateGoods);
 
