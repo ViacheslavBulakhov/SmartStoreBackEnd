@@ -39,10 +39,12 @@ const goodSchema = new Schema({
     default: 0,
   },
 
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
 
   filters: Schema.Types.Mixed,
 });

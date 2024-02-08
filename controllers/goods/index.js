@@ -1,14 +1,18 @@
 const { getAllGoods } = require('./getAllGoods');
-const { getContactById } = require('./getContactById');
+const { getGodsById } = require('./getGoodsById');
 const { addGood } = require('./addGood');
 const { updateGoods } = require('./updateGoods');
+const { updateGoodsStatus } = require('./updateGoodsStatus');
+const { getAllGoodsByOwner } = require('./getAllGoodsByOwner');
 
 const { removeGoods } = require('./removeGoods');
 
 module.exports = {
   getAllGoods,
-  getContactById,
+  getAllGoodsByOwner,
+  getGodsById,
   addGood,
   updateGoods,
+  updateGoodsStatus,
   removeGoods,
 };

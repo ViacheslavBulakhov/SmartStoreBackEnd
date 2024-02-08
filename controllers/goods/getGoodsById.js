@@ -1,7 +1,7 @@
 const { HttpError, ctrlWrapper } = require('../../helpers');
 const { Goods } = require('../../models/MongooseModels');
 
-const getContactById = async (req, res) => {
+const getGodsById = async (req, res) => {
   const { id } = req.params;
 
   const result = await Goods.findById(id);
@@ -14,5 +14,5 @@ const getContactById = async (req, res) => {
 };
 
 module.exports = {
-  getContactById: ctrlWrapper(getContactById),
+  getGodsById: ctrlWrapper(getGodsById),
 };
