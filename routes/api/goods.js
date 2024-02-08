@@ -2,11 +2,10 @@ const express = require('express');
 
 const {
   isValidId,
-  validateBody,
+  upload,
   authenticate,
   isAdmin,
 } = require('../../middlewares');
-const { updateFavoriteShema } = require('../../models/JoiSchemas');
 
 const {
   getAllGoods,
@@ -30,7 +29,7 @@ goodsRouter.get('/:id', isValidId, getGodsById);
 goodsRouter.patch('/:id/favorite', authenticate, isValidId, updateGoodsStatus);
 
 // Private admin route
-goodsRouter.post('/', authenticate, isAdmin, addGood);
+goodsRouter.post('/', authenticate, isAdmin, upload.single('img'), addGood);
 
 goodsRouter.put('/:id', authenticate, isAdmin, isValidId, updateGoods);
 

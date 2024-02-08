@@ -45,6 +45,10 @@ const goodSchema = new Schema({
       ref: 'user',
     },
   ],
+  imgUrl: {
+    type: String,
+    required: true,
+  },
 
   filters: Schema.Types.Mixed,
 });
