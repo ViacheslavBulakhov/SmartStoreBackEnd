@@ -16,7 +16,6 @@ const {
   updateGoodsStatus,
   getAllGoodsByOwner,
 } = require('../../controllers/goods');
-const { uploadErrorHandler } = require('../../service/imageService');
 
 const goodsRouter = express.Router();
 
