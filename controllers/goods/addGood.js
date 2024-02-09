@@ -5,14 +5,16 @@ const { uploadImage } = require('../../service/imageService');
 const addGood = async (req, res) => {
   const { path: tempUpload, originalname: name } = req.file;
 
-  const { url } = await uploadImage(tempUpload, name);
+  const imgData = await uploadImage(tempUpload, name);
+  console.log(imgData.public_id);
 
   const filters = JSON.parse(req.body.filters);
 
   const result = await Goods.create({
     ...req.body,
     filters,
-    imgUrl: url,
+    imgUrl: imgData.url,
+    imgId: imgData.public_id,
   });
   res.status(201).json(result);
 };

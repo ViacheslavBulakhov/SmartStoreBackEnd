@@ -49,6 +49,9 @@ const goodSchema = new Schema({
     type: String,
     required: true,
   },
+  imgId: {
+    type: String,
+  },
 
   filters: Schema.Types.Mixed,
 });
