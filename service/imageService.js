@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const cloudinary = require('cloudinary').v2;
+const { v4: uuidv4 } = require('uuid');
 
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 
@@ -11,7 +12,7 @@ cloudinary.config({
 
 const uploadImage = async path => {
   const result = await cloudinary.uploader
-    .upload(path, { public_id: 'SmartStoreImage' })
+    .upload(path, { public_id: uuidv4() })
     .then(data => data);
 
   await fs.unlink(path);
