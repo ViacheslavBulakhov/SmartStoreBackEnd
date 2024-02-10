@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../../middlewares/handleMongooseError');
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const numberRegexp = /^\+?[0-9]{8,15}$/;
 
 const userSchema = new Schema(
   {
@@ -10,10 +10,10 @@ const userSchema = new Schema(
       required: [true, 'Set password for user'],
       minlength: 6,
     },
-    email: {
+    number: {
       type: String,
-      required: [true, 'Email is required'],
-      match: emailRegexp,
+      required: [true, 'Number is required'],
+      match: numberRegexp,
       unique: true,
     },
     personalDiscount: {
