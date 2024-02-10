@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const cloudinary = require('cloudinary').v2;
 const { v4: uuidv4 } = require('uuid');
-const { ctrlWrapper } = require('../helpers');
+const { HttpError } = require('../helpers');
 require('dotenv').config();
 
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
@@ -13,22 +13,29 @@ cloudinary.config({
 });
 
 const uploadImage = async path => {
-  const result = await cloudinary.uploader
-    .upload(path, { public_id: uuidv4() })
-    .then(data => {
-      console.log(data);
-      return data;
+  try {
+    const result = await cloudinary.uploader.upload(path, {
+      public_id: uuidv4(),
     });
 
-  await fs.unlink(path);
-  return result;
+    return result;
+  } catch (error) {
+    throw HttpError(500, 'Internal Server Error');
+  } finally {
+    await fs.unlink(path);
+  }
 };
 
 const deleteImage = async id => {
-  return await cloudinary.uploader.destroy(id, 'image');
+  try {
+    const result = await cloudinary.uploader.destroy(id, 'image');
+    return result;
+  } catch (error) {
+    throw HttpError(500, 'Internal Server Error');
+  }
 };
 
 module.exports = {
-  uploadImage: ctrlWrapper(uploadImage),
-  deleteImage: ctrlWrapper(deleteImage),
+  uploadImage,
+  deleteImage,
 };
