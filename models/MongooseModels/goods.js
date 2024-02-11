@@ -30,7 +30,7 @@ const goodSchema = new Schema({
     required: [true, 'Set amount for goods'],
   },
 
-  dicount: {
+  discount: {
     type: Number,
   },
 
