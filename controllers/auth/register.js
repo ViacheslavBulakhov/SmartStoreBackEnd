@@ -34,6 +34,7 @@ const register = async (req, res) => {
     user: {
       number,
       role: newUser.role,
+      id: newUser._id,
       personalDiscount: newUser.personalDiscount,
     },
   });
