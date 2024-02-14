@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../../middlewares/handleMongooseError');
 
-const numberRegexp = /^\+?[0-9]{8,15}$/;
+const numberRegexp = /^\+?[0-9]{12}$/;
 
 const userSchema = new Schema(
   {
