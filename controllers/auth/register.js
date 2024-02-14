@@ -33,6 +33,7 @@ const register = async (req, res) => {
     token,
     user: {
       number,
+      role: newUser.role,
       personalDiscount: newUser.personalDiscount,
     },
   });
