@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const { User } = require('../../models/MongooseModels');
 const { HttpError } = require('../../helpers');
+
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { password, email } = req.body;
@@ -14,12 +17,22 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const payload = {
+    id: email,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    token,
+  });
 
   res.status(201).json({
     user: {
       number: user.number,
       subscription: newUser.subscription,
+      token,
     },
   });
 };
