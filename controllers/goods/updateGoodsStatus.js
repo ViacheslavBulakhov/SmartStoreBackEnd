@@ -25,9 +25,13 @@ const updateGoodsStatus = async (req, res) => {
       : [...goodsItem.favorites, _id.toString()];
   };
 
-  const result = await Goods.findByIdAndUpdate(id, {
-    favorites: newArray(),
-  });
+  const result = await Goods.findByIdAndUpdate(
+    id,
+    {
+      favorites: newArray(),
+    },
+    { new: true }
+  );
 
   if (!result) {
     throw HttpError(404, 'Not found');
