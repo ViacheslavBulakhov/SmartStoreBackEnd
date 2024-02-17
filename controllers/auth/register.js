@@ -17,17 +17,18 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
+  const newUser = await User.create({
+    number,
+    password: hashPassword,
+  });
+
   const payload = {
-    id: number,
+    id: newUser._id,
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
 
-  const newUser = await User.create({
-    number,
-    password: hashPassword,
-    token,
-  });
+  await User.findByIdAndUpdate(newUser._id, { token });
 
   res.status(201).json({
     token,
