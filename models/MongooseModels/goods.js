@@ -7,6 +7,11 @@ const goodSchema = new Schema({
     required: [true, 'Set categories for goods'],
   },
 
+  type: {
+    type: String,
+    required: [true, 'Set type for goods'],
+  },
+
   brand: {
     type: String,
     required: [true, 'Set brand for goods'],
