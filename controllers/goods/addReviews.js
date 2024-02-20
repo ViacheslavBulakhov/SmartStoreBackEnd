@@ -7,10 +7,8 @@ const addReviews = async (req, res) => {
 
   const result = await Goods.findByIdAndUpdate(
     id,
-    { $push: reviews },
-    {
-      new: true,
-    }
+    { $push: { reviews: reviews } },
+    { upsert: true, new: true }
   );
 
   if (!result) {
