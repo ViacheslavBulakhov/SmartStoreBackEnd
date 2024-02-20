@@ -15,6 +15,7 @@ const {
   updateGoods,
   updateGoodsStatus,
   getAllGoodsByOwner,
+  addReviews,
 } = require('../../controllers/goods');
 
 const goodsRouter = express.Router();
@@ -32,6 +33,8 @@ goodsRouter.patch('/:id/favorite', authenticate, isValidId, updateGoodsStatus);
 goodsRouter.post('/', upload.single('img'), authenticate, isAdmin, addGood);
 
 goodsRouter.put('/:id', authenticate, isAdmin, isValidId, updateGoods);
+
+goodsRouter.put('/:id/addReviews', authenticate, isValidId, addReviews);
 
 goodsRouter.delete('/:id', authenticate, isAdmin, isValidId, removeGoods);
 

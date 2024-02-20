@@ -4,6 +4,7 @@ const { addGood } = require('./addGood');
 const { updateGoods } = require('./updateGoods');
 const { updateGoodsStatus } = require('./updateGoodsStatus');
 const { getAllGoodsByOwner } = require('./getAllGoodsByOwner');
+const { addReviews } = require('./addReviews');
 
 const { removeGoods } = require('./removeGoods');
 
@@ -15,4 +16,5 @@ module.exports = {
   updateGoods,
   updateGoodsStatus,
   removeGoods,
+  addReviews,
 };

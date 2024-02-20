@@ -56,7 +56,7 @@ const goodSchema = new Schema({
   reviews: [
     {
       name: { type: String, required: true },
-      feedbackPoints: [{ type: Number }],
+      feedbackPoints: { type: Number },
       text: { type: String },
     },
   ],
