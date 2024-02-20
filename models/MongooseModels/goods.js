@@ -53,6 +53,13 @@ const goodSchema = new Schema({
       ref: 'user',
     },
   ],
+  reviews: [
+    {
+      name: { type: String, required: true },
+      feedbackPoints: [{ type: Number }],
+      text: { type: String },
+    },
+  ],
   imgUrl: {
     type: String,
     required: true,

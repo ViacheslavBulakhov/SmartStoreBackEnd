@@ -12,6 +12,7 @@ const addGood = async (req, res) => {
   const result = await Goods.create({
     ...req.body,
     filters,
+    reviews: [],
     imgUrl: imgData.url,
     imgId: imgData.public_id,
   });
