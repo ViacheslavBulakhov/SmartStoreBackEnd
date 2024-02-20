@@ -34,7 +34,7 @@ goodsRouter.post('/', upload.single('img'), authenticate, isAdmin, addGood);
 
 goodsRouter.put('/:id', authenticate, isAdmin, isValidId, updateGoods);
 
-goodsRouter.put('/:id/addReviews', authenticate, isValidId, addReviews);
+goodsRouter.put('/addReviews/:id', authenticate, isValidId, addReviews);
 
 goodsRouter.delete('/:id', authenticate, isAdmin, isValidId, removeGoods);
 
