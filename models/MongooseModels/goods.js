@@ -69,6 +69,7 @@ const goodSchema = new Schema(
     imgId: {
       type: String,
     },
+    extraPhotos: Schema.Types.Mixed,
 
     filters: Schema.Types.Mixed,
   },

@@ -30,7 +30,17 @@ goodsRouter.get('/:id', isValidId, getGodsById);
 goodsRouter.patch('/:id/favorite', authenticate, isValidId, updateGoodsStatus);
 
 // Private admin route
-goodsRouter.post('/', upload.single('img'), authenticate, isAdmin, addGood);
+
+goodsRouter.post(
+  '/',
+  upload.fields([
+    { name: 'img', maxCount: 1 },
+    { name: 'extraPhotos', maxCount: 10 },
+  ]),
+  authenticate,
+  isAdmin,
+  addGood
+);
 
 goodsRouter.put('/:id', authenticate, isAdmin, isValidId, updateGoods);
 

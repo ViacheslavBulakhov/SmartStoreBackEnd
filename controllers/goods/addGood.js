@@ -3,9 +3,18 @@ const { Goods } = require('../../models/MongooseModels');
 const { uploadImage } = require('../../service/imageService');
 
 const addGood = async (req, res) => {
-  const { path } = req.file;
+  const { img, extraPhotos } = req.files;
 
-  const imgData = await uploadImage(path);
+  const pathExtraPhotos = extraPhotos.map(item => item.path);
+
+  const newExtraPhotos = [];
+
+  for (const path of pathExtraPhotos) {
+    const result = await uploadImage(path);
+    newExtraPhotos.push({ url: result.url, id: result.public_id });
+  }
+
+  const imgData = await uploadImage(img[0].path);
 
   const filters = JSON.parse(req.body?.filters) || [];
 
@@ -15,6 +24,7 @@ const addGood = async (req, res) => {
     reviews: [],
     imgUrl: imgData.url,
     imgId: imgData.public_id,
+    extraPhotos: newExtraPhotos,
   });
   res.status(201).json(result);
 };
