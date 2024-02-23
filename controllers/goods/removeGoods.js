@@ -7,7 +7,17 @@ const removeGoods = async (req, res) => {
 
   const result = await Goods.findByIdAndRemove(id);
 
-  deleteImage(result.imgId);
+  const extraPhotos = result.extraPhotos
+    ? result.extraPhotos.map(item => item.id)
+    : [];
+
+  if (extraPhotos.length > 0) {
+    for (const id of extraPhotos) {
+      await deleteImage(id);
+    }
+  }
+
+  await deleteImage(result.imgId);
 
   if (!result) {
     throw HttpError(404, 'Not found');

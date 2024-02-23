@@ -5,13 +5,14 @@ const { uploadImage } = require('../../service/imageService');
 const addGood = async (req, res) => {
   const { img, extraPhotos } = req.files;
 
-  const pathExtraPhotos = extraPhotos.map(item => item.path);
-
   const newExtraPhotos = [];
+  if (extraPhotos && extraPhotos.length > 0) {
+    const pathExtraPhotos = extraPhotos.map(item => item.path);
 
-  for (const path of pathExtraPhotos) {
-    const result = await uploadImage(path);
-    newExtraPhotos.push({ url: result.url, id: result.public_id });
+    for (const path of pathExtraPhotos) {
+      const result = await uploadImage(path);
+      newExtraPhotos.push({ url: result.url, id: result.public_id });
+    }
   }
 
   const imgData = await uploadImage(img[0].path);
