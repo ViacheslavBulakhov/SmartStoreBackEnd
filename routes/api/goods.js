@@ -42,7 +42,17 @@ goodsRouter.post(
   addGood
 );
 
-goodsRouter.put('/:id', authenticate, isAdmin, isValidId, updateGoods);
+goodsRouter.put(
+  '/:id',
+  upload.fields([
+    { name: 'img', maxCount: 1 },
+    { name: 'extraPhotos', maxCount: 10 },
+  ]),
+  authenticate,
+  isAdmin,
+  isValidId,
+  updateGoods
+);
 
 goodsRouter.put('/addReviews/:id', authenticate, isValidId, addReviews);
 
