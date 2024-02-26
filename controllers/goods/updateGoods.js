@@ -1,47 +1,87 @@
 const { HttpError, ctrlWrapper } = require('../../helpers');
 const { Goods } = require('../../models/MongooseModels');
-const { deleteImage } = require('../../service/imageService');
+const { deleteImage, uploadImage } = require('../../service/imageService');
 
 const updateGoods = async (req, res) => {
   const { id } = req.params;
 
-  const newMainPhoto = req.files?.img || null;
-  const newExtraPhotos = req.files?.extraPhotos || null;
+  const { img, extraPhotos } = req.files;
 
-  const oldExtraPhotos = req.body?.oldExtraPhotos || null;
+  const newExtraPhotos = [];
 
-  const result = await Goods.findById(id);
-  const currentExtraPhotos = result?.extraPhotos || null;
-  console.log(req.body);
+  if (extraPhotos && extraPhotos.length > 0) {
+    const pathExtraPhotos = extraPhotos.map(item => item.path);
 
-  if (oldExtraPhotos) {
-    if (typeof oldExtraPhotos === 'string') {
-      const findIdIMageToDeletteBySting = oldId => {
-        return currentExtraPhotos
-          .filter(({ id }) => id !== oldId)
-          .map(({ id }) => id);
-      };
-      console.log(findIdIMageToDeletteBySting(oldExtraPhotos));
-    } else {
-      const findIdIMageToDeletteByArray = (arr1, arr2) => {
-        return arr1.filter(obj => !arr2.includes(obj.id)).map(({ id }) => id);
-      };
-
-      console.log(
-        findIdIMageToDeletteByArray(currentExtraPhotos, oldExtraPhotos)
-      );
+    for (const path of pathExtraPhotos) {
+      const result = await uploadImage(path);
+      newExtraPhotos.push({ url: result.url, id: result.public_id });
     }
   }
 
-  // const result = await Goods.findByIdAndUpdate(id, req.body, {
-  //   new: true,
-  // });
+  const extraPhotosForDelete = req.body?.extraPhotosForDelete || null;
 
-  // if (!result) {
-  //   throw HttpError(404, 'Not found');
-  // }
+  const currentGoods = await Goods.findById(id);
 
-  // res.json(result);
+  let updatedExtraPhotos = currentGoods?.extraPhotos
+    ? [...currentGoods.extraPhotos]
+    : [];
+
+  if (extraPhotosForDelete) {
+    if (typeof extraPhotosForDelete === 'string') {
+      await deleteImage(extraPhotosForDelete);
+
+      updatedExtraPhotos = [
+        ...currentGoods.extraPhotos.filter(
+          item => item.id !== extraPhotosForDelete
+        ),
+      ];
+    } else {
+      for (const photoId of extraPhotosForDelete) {
+        await deleteImage(photoId);
+      }
+
+      updatedExtraPhotos = [
+        ...currentGoods.extraPhotos.filter(
+          item => !extraPhotosForDelete.includes(item.id)
+        ),
+      ];
+    }
+  }
+
+  let imgData = null;
+
+  if (img) {
+    imgData = await uploadImage(img[0].path);
+    await deleteImage(currentGoods.imgId);
+  }
+
+  const filters = JSON.parse(req.body?.filters) || [];
+
+  const newGoodsObj = {
+    ...req.body,
+    extraPhotos: [...updatedExtraPhotos, ...newExtraPhotos],
+  };
+
+  if (filters.length > 0) {
+    newGoodsObj.filters = filters;
+  }
+
+  if (imgData) {
+    newGoodsObj.imgUrl = imgData.url;
+    newGoodsObj.imgId = imgData.public_id;
+  }
+
+  delete newGoodsObj.extraPhotosForDelete;
+
+  const result = await Goods.findByIdAndUpdate(id, newGoodsObj, {
+    new: true,
+  });
+
+  if (!result) {
+    throw HttpError(404, 'Not found');
+  }
+
+  res.json(result);
 };
 
 module.exports = {
