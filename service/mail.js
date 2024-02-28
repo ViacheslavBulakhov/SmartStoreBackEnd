@@ -1,7 +1,9 @@
 const nodemailer = require('nodemailer');
 const { ctrlWrapper } = require('../helpers');
+const { SalesCounter } = require('../models/MongooseModels');
 
 const { ICLOUD_PASS, ICLOUD_LOGIN } = process.env;
+const id = '65df35cfe64871cc53345c7c';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.mail.me.com',
@@ -21,28 +23,49 @@ transporter.verify(function (error, success) {
 });
 
 const sendEmail = async (req, res) => {
-  const {
-    title = 'Title',
-    count = 'count',
-    amount = 'amount',
-    img = '',
-  } = req.body;
+  const totalCalculate = req.body.reduce(
+    (acc, item) => {
+      const totalCount = item?.buyCount ? acc[0] + item.buyCount : acc[0] + 1;
+      const totalAmount = item?.buyCount
+        ? acc[1] + item.amount * item.buyCount
+        : acc[1] + item.amount;
 
-  const html = `<div>
-            <h1> Нове Замовлення №10</h2>
-        <ul>
+      return [totalCount, totalAmount];
+    },
+    [0, 0]
+  );
+
+  const data = await SalesCounter.find({});
+
+  const html = `
+    <div>
+      <h1>Замовлення №:${data[0].count}</h1>
+      <a href="tel: ${'tel'}">number</a>
+      <h2>Товарів  ${totalCalculate[0]} на суму ${totalCalculate[1]}грн</h2>
+      <ul>
+        ${req.body
+          .map(
+            item => `
           <li>
-           <img src=${img} width="100px" height="100px">
             <div>
               <h2>
-                <a href="">${title}</a>
+                ${item.title}
               </h2>
-              <p>кількість ${count} од</p>
-              <p>Вартість ${amount} ₴</p>
+              <img src=${item.imgUrl}
+              alt=${item.title}
+              width="100px"
+              height="100px"/>
+              <p>кількість ${item.buyCount || 1} од</p>
+              <p>Вартість ${item.amount} ₴</p>
             </div>
           </li>
-        </ul>
-      </div>`;
+        `
+          )
+          .join('')}
+      </ul>
+
+    </div>
+  `;
 
   const mailData = {
     to: 'dmytrotretiakov94@gmail.com',
@@ -53,14 +76,13 @@ const sendEmail = async (req, res) => {
     from: 'SmartStoreUa@icloud.com',
   };
 
-  try {
-    await transporter.sendMail(mailData);
-    console.log('Email sent successfully');
-    res.status(200).json({ status: 'OK' });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+  await transporter.sendMail(mailData);
+
+  await SalesCounter.findByIdAndUpdate(id, {
+    count: data[0].count + 1,
+  });
+
+  res.status(200).json({ status: 'OK' });
 };
 
 module.exports = { sendEmail: ctrlWrapper(sendEmail) };
