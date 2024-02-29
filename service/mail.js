@@ -23,7 +23,7 @@ transporter.verify(function (error, success) {
 });
 
 const sendEmail = async (req, res) => {
-  const totalCalculate = req.body.reduce(
+  const totalCalculate = req.body.buyingList.reduce(
     (acc, item) => {
       const totalCount = item?.buyCount ? acc[0] + item.buyCount : acc[0] + 1;
       const totalAmount = item?.buyCount
@@ -40,10 +40,12 @@ const sendEmail = async (req, res) => {
   const html = `
     <div>
       <h1>Замовлення №:${data[0].count}</h1>
-      <a href="tel: ${'tel'}">number</a>
+        <h3>${req.body.user.name}</h3>
+      <a href="tel: ${req.body.user.number}">${req.body.user.number}</a>
+    
       <h2>Товарів  ${totalCalculate[0]} на суму ${totalCalculate[1]}грн</h2>
       <ul>
-        ${req.body
+        ${req.body.buyingList
           .map(
             item => `
           <li>
