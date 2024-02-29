@@ -8,6 +8,7 @@ const {
   logout,
   getCurrentUser,
   updateUserSubscription,
+  refreshUser,
 } = require('../../controllers/auth');
 const {
   updateUserSubscriptionSchema,
@@ -20,6 +21,7 @@ authRouter.post('/register', validateBody(registerSchema), register);
 authRouter.post('/login', validateBody(logInSchema), login);
 authRouter.post('/logout', authenticate, logout);
 authRouter.post('/mail', sendEmail);
+authRouter.post('/refresh', authenticate, refreshUser);
 
 authRouter.post('/current', authenticate, getCurrentUser);
 authRouter.patch(
