@@ -34,16 +34,44 @@ const sendEmail = async (req, res) => {
     },
     [0, 0]
   );
+  const { delivery, payment, region, city, department, name, number, text } =
+    req.body.user;
 
   const data = await SalesCounter.find({});
 
   const html = `
     <div>
       <h1>Замовлення №:${data[0].count}</h1>
-        <h3>${req.body.user.name}</h3>
-      <a href="tel: ${req.body.user.number}">${req.body.user.number}</a>
+        <h3>${name}</h3>
+      <a href="tel: ${number}">${number}</a>
     
       <h2>Товарів  ${totalCalculate[0]} на суму ${totalCalculate[1]}грн</h2>
+
+       <div>
+    <p>
+    Пошта: 
+      <span>${delivery === 'nova-post' ? 'Нова Пошта' : 'Укр Пошта'}</span>
+    </p>
+    <p>
+    Оплата: 
+      <span>${
+        payment === 'cash-on-delivery' ? 'Післяплата' : 'Плата Картою'
+      } </span>
+    </p>
+    <p>
+    Область: 
+      <span>${region}</span>
+    </p>
+    <p>Місто: 
+      <span>${city}</span>
+    </p>
+    <p>Відділення: 
+      <span>${department}</span>
+    </p>
+    <p>Коментар: 
+      <span>${text || 'Без коментарів'}</span>
+    </p>
+  </div>
       <ul>
         ${req.body.buyingList
           .map(
