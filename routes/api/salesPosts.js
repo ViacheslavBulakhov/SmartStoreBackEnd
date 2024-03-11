@@ -12,6 +12,6 @@ salesPostsRouter.patch(
   addSalesPosts
 );
 
-salesPostsRouter.get('/get', authenticate, getSalesPosts);
+salesPostsRouter.get('/get', getSalesPosts);
 
 module.exports = salesPostsRouter;
