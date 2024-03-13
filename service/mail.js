@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const { ctrlWrapper } = require('../helpers');
 const { SalesCounter } = require('../models/MongooseModels');
+const { Goods } = require('../models/MongooseModels');
 
 const { ICLOUD_PASS, ICLOUD_LOGIN } = process.env;
 const id = '65df35cfe64871cc53345c7c';
@@ -115,4 +116,36 @@ const sendEmail = async (req, res) => {
   res.status(200).json({ status: 'OK' });
 };
 
-module.exports = { sendEmail: ctrlWrapper(sendEmail) };
+const sendEmailAboutGoodsCount = async data => {
+  try {
+    if (
+      data.operationType === 'update' &&
+      data?.updateDescription?.updatedFields?.count
+    ) {
+      const id = data.documentKey._id.toString();
+      console.log(id);
+      const result = await Goods.find({});
+      console.log(result);
+      // const html = `
+      //  <h1>Ваш товар вже в наявності відвідайте наш сайт для замовлення</h1>
+      //       <h3>Назва товару</h3>
+      //     <a >посилання</a>
+      // `;
+      // const mailData = {
+      //   to: 'dmytrotretiakov94@gmail.com',
+      //   subject: 'New Guest',
+      //   text: `Hello Test Mail`,
+      //   html,
+      //   from: 'SmartStoreUa@icloud.com',
+      // };
+      // await transporter.sendMail(mailData);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  sendEmail: ctrlWrapper(sendEmail),
+  sendEmailAboutGoodsCount,
+};
