@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../../models/MongooseModels');
+const { calculateDiscount } = require('../../helpers');
 const { SECRET_KEY } = process.env;
 
 const refreshUser = async (req, res) => {
@@ -19,7 +20,8 @@ const refreshUser = async (req, res) => {
       number: user.number,
       role: user.role,
       id: user._id,
-      personalDiscount: user.personalDiscount,
+      personalDiscount: calculateDiscount(user.totalPurchaseAmount),
+      totalPurchaseAmount: user.totalPurchaseAmount,
     },
   });
 };

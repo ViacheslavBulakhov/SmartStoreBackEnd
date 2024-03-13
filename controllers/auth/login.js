@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { User } = require('../../models/MongooseModels');
-const { HttpError } = require('../../helpers');
+const { HttpError, calculateDiscount } = require('../../helpers');
 
 const { SECRET_KEY } = process.env;
 
@@ -33,8 +33,9 @@ const login = async (req, res) => {
     user: {
       number: user.number,
       role: user.role,
-      id:user._id,
-      personalDiscount: user.personalDiscount,
+      id: user._id,
+      personalDiscount: calculateDiscount(user.totalPurchaseAmount),
+      totalPurchaseAmount: user.totalPurchaseAmount,
     },
   });
 };

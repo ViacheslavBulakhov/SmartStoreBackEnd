@@ -16,6 +16,11 @@ const userSchema = new Schema(
       match: numberRegexp,
       unique: true,
     },
+    totalPurchaseAmount: {
+      type: Number,
+      default: 0,
+    },
+
     personalDiscount: {
       type: Number,
       enum: [0, 3, 5, 7, 10, 12, 15, 20],
