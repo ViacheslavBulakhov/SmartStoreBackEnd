@@ -81,7 +81,6 @@ const goodSchema = new Schema(
 goodSchema.post('save', handleMongooseError);
 
 const Goods = model('good', goodSchema);
+module.exports = Goods;
 
 Goods.watch().on('change', data => sendEmailAboutGoodsCount(data));
-
-module.exports = Goods;

@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const { ctrlWrapper } = require('../helpers');
-const { SalesCounter } = require('../models/MongooseModels');
-const { Goods } = require('../models/MongooseModels');
+const SalesCounter = require('../models/MongooseModels/count');
+const Goods = require('../models/MongooseModels/goods');
 
 const { ICLOUD_PASS, ICLOUD_LOGIN } = process.env;
 const id = '65df35cfe64871cc53345c7c';
