@@ -16,12 +16,15 @@ const {
   updateGoodsStatus,
   getAllGoodsByOwner,
   addReviews,
+  addSubscribers,
 } = require('../../controllers/goods');
 
 const goodsRouter = express.Router();
 
 // Public route
 goodsRouter.get('/', getAllGoods);
+goodsRouter.post('/subscribe', addSubscribers);
+
 // Private route
 goodsRouter.get('/owner', authenticate, getAllGoodsByOwner);
 

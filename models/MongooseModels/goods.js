@@ -46,6 +46,7 @@ const goodSchema = new Schema(
       type: Number,
       default: 0,
     },
+
     description: {
       type: String,
     },
@@ -56,6 +57,7 @@ const goodSchema = new Schema(
         ref: 'user',
       },
     ],
+
     reviews: [
       {
         name: { type: String, required: true },
@@ -64,13 +66,21 @@ const goodSchema = new Schema(
         date: { type: Date, required: true },
       },
     ],
+
+    subscribers: {
+      type: [String],
+      default: [],
+    },
+
     imgUrl: {
       type: String,
       required: true,
     },
+
     imgId: {
       type: String,
     },
+
     extraPhotos: Schema.Types.Mixed,
 
     filters: Schema.Types.Mixed,
