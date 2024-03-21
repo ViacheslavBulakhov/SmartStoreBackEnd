@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../../middlewares/handleMongooseError');
+
 const { sendEmailAboutGoodsCount } = require('../../service/mail');
-// const smsService = require('../../service/smsService');
 
 const goodSchema = new Schema(
   {
@@ -93,4 +93,4 @@ goodSchema.post('save', handleMongooseError);
 const Goods = model('good', goodSchema);
 module.exports = Goods;
 
-Goods.watch().on('change', data => sendEmailAboutGoodsCount(data));
+// Goods.watch().on('change', data => sendEmailAboutGoodsCount(data));

@@ -1,6 +1,8 @@
 const { HttpError, ctrlWrapper } = require('../../helpers');
+
 const { Goods } = require('../../models/MongooseModels');
 const { deleteImage, uploadImage } = require('../../service/imageService');
+const { sendEmailAboutGoodsCount } = require('../../service/mail');
 
 const updateGoods = async (req, res) => {
   const { id } = req.params;
@@ -76,7 +78,12 @@ const updateGoods = async (req, res) => {
   const result = await Goods.findByIdAndUpdate(id, newGoodsObj, {
     new: true,
   });
-
+  if (
+    Number(req.body.count) !== Number(currentGoods.count) &&
+    Number(req.body.count) !== 0
+  ) {
+    sendEmailAboutGoodsCount(currentGoods);
+  }
   if (!result) {
     throw HttpError(404, 'Not found');
   }
