@@ -40,63 +40,134 @@ const sendEmail = async (req, res) => {
 
   const data = await SalesCounter.find({});
 
-  const html = `
-    <div>
-      <h1>Замовлення №:${data[0].count}</h1>
-        <h3>${name}</h3>
-      <a href="tel: ${number}">${number}</a>
-    
-      <h2>Товарів  ${totalCalculate[0]} на суму ${totalCalculate[1]}грн</h2>
+  const today = new Date();
 
-       <div>
-    <p>
-    Пошта: 
-      <span>${delivery === 'nova-post' ? 'Нова Пошта' : 'Укр Пошта'}</span>
-    </p>
-    <p>
-    Оплата: 
-      <span>${
-        payment === 'cash-on-delivery' ? 'Післяплата' : 'Плата Картою'
-      } </span>
-    </p>
-    <p>
-    Область: 
-      <span>${region}</span>
-    </p>
-    <p>Місто: 
-      <span>${city}</span>
-    </p>
-    <p>Відділення: 
-      <span>${department}</span>
-    </p>
-    <p>Коментар: 
-      <span>${text || 'Без коментарів'}</span>
-    </p>
-  </div>
-      <ul>
-        ${req.body.buyingList
-          .map(
-            item => `
-          <li>
-            <div>
-              <h2>
-                ${item.title}
-              </h2>
-              <img src=${item.imgUrl}
-              alt=${item.title}
-              width="100px"
-              height="100px"/>
-              <p>кількість ${item.buyCount || 1} од</p>
-              <p>Вартість ${item.amount} ₴</p>
-            </div>
-          </li>
-        `
-          )
-          .join('')}
-      </ul>
+  const day = today.getDate();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
 
-    </div>
-  `;
+  const formattedDate = `${day < 10 ? '0' + day : day}.${
+    month < 10 ? '0' + month : month
+  }.${year}`;
+
+  const html = `<table 
+  border="1" 
+  style="border-collapse:collapse;
+	border-spacing:0;
+  width:400px;
+  margin-bottom: 20px;">
+
+  <tr style="background-color: #efefef;border: none;">
+    <th colspan="2">Деталізація замовлення</th>
+  </tr>
+
+  <tr style=" border: none;">
+ 
+    <td style="border: none;"> <b>№ замовлення:</b> ${data[0].count}</td>
+   
+  </tr>
+  <tr>
+    <td style="border: none;"><b>Дата замовлення:</b>  ${formattedDate}</td>
+  </tr>
+
+   <tr>
+    <td style="border: none;"><b>Телефон:</b> ${number}</td>
+  </tr>
+</table>
+
+<table 
+  border="1" 
+  style="border-collapse:collapse;
+	border-spacing:0;
+  width:400px;
+  margin-bottom: 20px;">
+
+  <tr style="background-color: #efefef;border: none;">
+    <th colspan="2">Дані для відправлення</th>
+  </tr>
+
+  <tr style=" border: none;">
+    <td style="border: none;"> <b>Ім'я: </b> ${name}</td>
+  </tr>
+ 
+
+   <tr>
+    <td style="border: none;"><b>Місто: </b> ${city}</td>
+  </tr>
+
+  <tr>
+    <td style="border: none;"><b>Область: </b> ${region}</td>
+  </tr>
+
+   <tr>
+    <td style="border: none;"> <b>Пошта:</b> ${
+      delivery === 'nova-post' ? 'Нова Пошта' : 'Укр Пошта'
+    } </td>
+  </tr>
+
+   <tr>
+    <td style="border: none;"><b>№ Відділення: </b>  ${department}</td>
+  </tr>
+
+   <tr>
+    <td style="border: none;"> <b>Спосіб оплати:</b>  ${
+      payment === 'cash-on-delivery' ? 'Післяплата' : 'Плата Картою'
+    }</td>
+   
+  </tr>
+ 
+</table>
+
+<table border="1" style="border-collapse:collapse;
+	border-spacing:0; width:400px; margin-bottom: 20px;">
+  <tr style="background-color: lightgray;">
+    <th>Товар</th>
+    <th>Модель</th>
+    <th>Кількість</th>
+    <th>Ціна</th>
+    <th>Разом</th>
+  </tr>
+
+          ${req.body.buyingList
+            .map(
+              item => `
+  <tr>
+    <th> ${item.title}</th>
+    <th>${item.model}</th>
+    <th>${item.buyCount || 1}</th>
+    <th>${item.amount}</th>
+    <th>${item.buyCount * item.amount} грн</th>
+  </tr>`
+            )
+            .join('')}
+
+  <tr style="background-color: #efefef;border: none;">
+  <th colspan="5">Разом: ${totalCalculate[1]} грн</th>
+  </tr>
+</table>
+
+
+<table 
+  border="1" 
+  style="border-collapse:collapse;
+	border-spacing:0;
+  width:400px;
+  margin-bottom: 20px;">
+
+  <tr style="background-color: #efefef;border: none;">
+    <th >Коментар від замовника</th>
+  </tr>
+
+  <tr style=" border: none;">
+ 
+    <td style="border: none;"> <b>${text}</b> </td>
+   
+  </tr>
+  
+</table>
+
+
+`;
 
   const mailData = {
     to: 'dmytrotretiakov94@gmail.com',
@@ -128,7 +199,6 @@ const sendEmailAboutGoodsCount = async data => {
       await transporter.sendMail(mailData);
     })
   );
-  console.log('Emails sent successfully');
 };
 
 module.exports = {
