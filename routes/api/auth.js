@@ -7,12 +7,9 @@ const {
   login,
   logout,
   getCurrentUser,
-  updateUserSubscription,
   refreshUser,
 } = require('../../controllers/auth');
-const {
-  updateUserSubscriptionSchema,
-} = require('../../models/JoiSchemas/user');
+
 const { sendEmail } = require('../../service/mail');
 
 const authRouter = express.Router();
@@ -24,11 +21,5 @@ authRouter.post('/mail', sendEmail);
 authRouter.post('/refresh', authenticate, refreshUser);
 
 authRouter.post('/current', authenticate, getCurrentUser);
-authRouter.patch(
-  '/',
-  authenticate,
-  validateBody(updateUserSubscriptionSchema),
-  updateUserSubscription
-);
 
 module.exports = authRouter;
